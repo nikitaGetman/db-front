@@ -2,8 +2,48 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
+import { LOGOUT } from "./store/actions/types";
+import apiService from "./apiService";
+
+import ElementUI from "element-ui";
+import "element-ui/lib/theme-chalk/index.css";
+import "@/assets/scss/base.scss";
 
 Vue.config.productionTip = false;
+
+Vue.use(ElementUI);
+
+const UNAUTHORIZED_STATUS = 401;
+const UNKNOWN_STATUS = 408;
+
+apiService.client.interceptors.request.use(
+  config => {
+    const { headers } = config;
+    const authHeaders = store.getters.headers;
+    return {
+      ...config,
+      headers: { ...headers, ...authHeaders }
+    };
+  },
+  error => error
+);
+apiService.client.interceptors.response.use(
+  response => (response && response.data ? response.data : response) || {},
+  error => {
+    const status = error.response ? error.response.status : UNKNOWN_STATUS;
+
+    if (status === UNAUTHORIZED_STATUS) {
+      return store
+        .dispatch(LOGOUT)
+        .then(() => router.replace({ name: "login" }));
+    }
+
+    // eslint-disable-next-line
+    console.warn("error in interceptors", status, error.response, error);
+
+    return Promise.reject(error);
+  }
+);
 
 new Vue({
   router,
