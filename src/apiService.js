@@ -8,9 +8,11 @@ const client = axios.create({
 
 const apiService = {
   client,
-  login({ username, password }) {
-    console.log("CALL LOGIN");
-    return this.client.post("/auth/login/", { username, password });
+  userLogin({ username, password }) {
+    return this.client.post("/user/login/", { username, password });
+  },
+  serviceLogin({ username, password }) {
+    return this.client.post("/service/login/", { username, password });
   },
   getMeProfile() {
     return this.client.get("/me/");

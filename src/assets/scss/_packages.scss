@@ -1,0 +1,254 @@
+/* override package`s variables
+-------------------------------— */
+$--font-path: "~element-ui/lib/theme-chalk/fonts"; // исправление пути до шрифтов для scss-loader
+$--font-size-base: 24px;
+$--color-primary: $--slate-blue;
+$--select-input-font-size: $--input-icon-width;
+$--select-dropdown-shadow: none;
+$--select-option-selected-font-color: $--table-row-selected-color;
+$--popup-modal-background-color: transparent;
+
+/* import packages
+------------------— */
+@import "~element-ui/packages/theme-chalk/src/form.scss";
+// @import '~element-ui/packages/theme-chalk/src/form-item.scss'; // похоже, что файл пустой
+@import "~element-ui/packages/theme-chalk/src/input.scss";
+@import "~element-ui/packages/theme-chalk/src/icon.scss";
+@import "~element-ui/packages/theme-chalk/src/button.scss";
+@import "~element-ui/packages/theme-chalk/src/loading.scss";
+@import "~element-ui/packages/theme-chalk/src/dialog.scss";
+@import "~element-ui/packages/theme-chalk/src/drawer.scss";
+@import "~element-ui/packages/theme-chalk/src/select.scss";
+@import "~element-ui/packages/theme-chalk/src/checkbox.scss";
+
+@import "~minireset.css/minireset.css";
+
+/* package`s overrides
+----------------------— */
+$--el-input-icon-width: $--input-icon-width;
+$--el-input-prefix-margin: 15px;
+$--el-input-prefix-padding: 2 * $--el-input-prefix-margin +
+  $--el-input-icon-width;
+$--el-input-medium-prefix-margin: 8px;
+$--el-input-medium-prefix-padding: 2 * $--el-input-medium-prefix-margin +
+  $--el-input-icon-width;
+$--el-dialog-header-button-size: 27px;
+$--el-dialog-padding: 32px + $--el-dialog-header-button-size;
+
+$--el-select-input-color: $--white;
+$--el-select-input-background: $--gradient-primary;
+$--el-select-input-disabled-background: $--lighten-gradient-primary;
+$--el-select-input-font-weight: $--font-weight-bold;
+$--el-select-dropdown-color: $--primary;
+
+.el-select {
+  width: 100%;
+
+  .el-input {
+    &.is-disabled {
+      .el-input__inner {
+        color: $--el-select-input-color;
+        background: $--el-select-input-disabled-background;
+
+        &::placeholder {
+          color: inherit;
+        }
+      }
+    }
+    &__inner {
+      font-weight: $--el-select-input-font-weight;
+      color: $--el-select-input-color;
+      background: $--el-select-input-background;
+
+      &::placeholder {
+        color: inherit;
+        font-weight: $--font-weight-normal;
+      }
+      .el-form-item:not(.is-error) & {
+        border-width: 0;
+      }
+    }
+
+    .el-select__caret {
+      display: inline-block;
+      // line-height: 1;
+      font-weight: $--el-select-input-font-weight;
+      color: $--el-select-input-color;
+
+      &:before {
+        transform: translateY(4px) rotateZ(180deg);
+      }
+      &.is-reverse &:before {
+        transform: translateY(-4px) rotateZ(0deg);
+      }
+    }
+  }
+}
+.el-select-dropdown.el-popper .popper__arrow {
+  display: none;
+}
+.el-select-dropdown {
+  border-radius: $--border-radius;
+  border-color: $--input-border-color;
+
+  &__item {
+    color: $--el-select-dropdown-color;
+    font-weight: $--font-weight-bold;
+    height: $--font-size-base * 2;
+    line-height: $--font-size-base * 2;
+
+    &.selected {
+      background-color: $--table-row-selected-background;
+
+      &:hover {
+        background-color: $--table-row-selected-background-hover;
+      }
+    }
+  }
+}
+.el-input__inner {
+  padding: 5px 20px;
+}
+.el-input__prefix {
+  left: $--el-input-prefix-margin;
+}
+.el-input__suffix {
+  right: $--el-input-prefix-margin;
+}
+.el-input--prefix .el-input__inner {
+  padding-left: $--el-input-prefix-padding;
+}
+.el-input--suffix .el-input__inner {
+  padding-right: $--el-input-prefix-padding;
+}
+.el-input__icon {
+  display: block;
+  width: $--el-input-icon-width;
+  line-height: inherit;
+  font-size: 1.25em;
+}
+.el-input--medium {
+  .el-input__inner {
+    border-radius: $--input-medium-border-radius;
+    font-size: $--input-medium-font-size;
+  }
+  .el-input__icon {
+    line-height: 38px;
+  }
+  .el-input__suffix,
+  .el-input__prefix {
+    margin-top: -1px;
+  }
+  .el-input__prefix {
+    left: $--el-input-medium-prefix-margin;
+  }
+  .el-input__suffix {
+    right: $--el-input-medium-prefix-margin;
+  }
+  &.el-input--prefix .el-input__inner {
+    padding-left: $--el-input-medium-prefix-padding;
+  }
+  &.el-input--suffix .el-input__inner {
+    padding-right: $--el-input-medium-prefix-padding;
+  }
+}
+.el-form-item {
+  margin-bottom: 32px;
+}
+.el-form-item__error {
+  color: $--danger;
+}
+.el-button {
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  &--text {
+    color: $--dark-gray;
+    text-decoration: underline;
+    font-weight: $--font-weight-normal;
+  }
+}
+.el-button.is-plain {
+  background-color: transparent;
+  border-color: $--slate-blue;
+}
+.el-dialog {
+  padding: $--el-dialog-padding $--el-dialog-padding 0;
+
+  &--center .el-dialog__body {
+    padding: 0;
+    text-align: center;
+  }
+  &__wrapper {
+    background-color: $--dialog-wrapper-background-color;
+  }
+  // &__header {
+  // text-align: center;
+  // }
+  &__header,
+  &__body,
+  &__footer {
+    padding: 0;
+  }
+  &__headerbtn {
+    font-size: $--el-dialog-header-button-size;
+    top: 0;
+    right: 0;
+
+    .el-dialog__close {
+      font-weight: $--font-weight-bold;
+      color: $--slate-blue;
+    }
+    &:focus,
+    &:hover {
+      .el-dialog__close {
+        color: $--steel-blue-600;
+      }
+    }
+    &:active {
+      .el-dialog__close {
+        color: $--darken-blue;
+      }
+    }
+  }
+  &__title {
+    color: $--slate-blue;
+    font-weight: $--font-weight-bold;
+  }
+}
+
+.el-checkbox {
+  &__input {
+    vertical-align: initial;
+  }
+  &__inner {
+    border-color: $--color-primary;
+    &:after {
+      width: 0;
+      height: 0;
+      left: 50%;
+      top: 50%;
+      background-color: $--color-primary;
+      border: none;
+      border-radius: 1px;
+      transform: none;
+      transition-property: width, height, left, top;
+    }
+  }
+  &__label {
+    font-size: $--font-size-base;
+    color: $--color-primary;
+    font-weight: $--font-weight-normal;
+  }
+
+  &__input.is-checked &__inner {
+    background-color: transparent;
+    &:after {
+      width: 10px;
+      height: 10px;
+      left: 1px;
+      top: 1px;
+      transform: none;
+    }
+  }
+}

@@ -1,0 +1,39 @@
+@import "packages";
+// @import "fonts";
+@import "vars";
+
+html,
+body,
+.app {
+  height: 100%;
+}
+
+body {
+  font-family: $--font-family;
+  font-size: $--font-size-base;
+  font-weight: $--font-weight-normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  text-size-adjust: 100%;
+
+  background-image: url("/img/background.svg");
+  background-size: 100%;
+  background-position: center;
+}
+
+button,
+input,
+textarea {
+  font-family: $--font-family;
+}
+
+button {
+  cursor: pointer;
+}
+
+@import "layouts/app-page";
+@import "layouts/app-page-centered";
+@import "layouts/app-page-content";
+
+@import "components/app-header";

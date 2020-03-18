@@ -6,12 +6,17 @@ import { LOGOUT } from "./store/actions/types";
 import apiService from "./apiService";
 
 import ElementUI from "element-ui";
+import AppPage from "@/layouts/AppPage.vue";
+import AppPageContent from "@/layouts/AppPageContent.vue";
+
 import "element-ui/lib/theme-chalk/index.css";
 import "@/assets/scss/base.scss";
 
 Vue.config.productionTip = false;
 
 Vue.use(ElementUI);
+Vue.use(AppPage.name, AppPage);
+Vue.use(AppPageContent.name, AppPageContent);
 
 const UNAUTHORIZED_STATUS = 401;
 const UNKNOWN_STATUS = 408;

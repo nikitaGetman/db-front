@@ -1,0 +1,66 @@
+$--content-append-column-width: $--content-width / 2;
+$--content-append-column-width-in-percentage: $--content-append-column-width / $--content-width * 100%;
+$--content-append-column-short-width: 328px;
+$--content-append-column-short-width-in-percentage: $--content-append-column-short-width / $--content-width * 100%;
+$--content-append-column-wide-width: 808px;
+$--content-append-column-wide-width-in-percentage: $--content-append-column-wide-width / $--content-width * 100%;
+
+.app-page-content {
+  $component: &;
+  display: flex;
+  height: 100%;
+  padding-bottom: 8px;
+
+  &__main-column,
+  &__append-column {
+    position: relative;
+    flex-direction: column;
+    display: flex;
+    align-items: flex-start;
+
+    // fix для появления scroll`a у вложенных блоков (таблиц и т.п.) в IE 11
+    &:before {
+      content: '';
+      display: block;
+      min-width: inherit;
+      height: 1px;
+    }
+  }
+
+  &__main-column {
+    flex-grow: 1;
+    flex-shrink: 1;
+    padding-top: 32px;
+  }
+
+  &__append-column {
+    padding-top: 80px;
+    margin-left: $--content-append-column-indent;
+    flex-shrink: 0;
+    width: calc(#{$--content-append-column-width-in-percentage} - #{$--content-append-column-indent / 2});
+  }
+
+  &--append {
+    #{$component}__main-column {
+      width: calc(#{$--content-append-column-width-in-percentage} - #{$--content-append-column-indent / 2});
+    }
+  }
+
+  &--append_short {
+    #{$component}__main-column {
+      width: calc(#{100% - $--content-append-column-short-width-in-percentage} - #{$--content-append-column-indent});
+    }
+    #{$component}__append-column {
+      width: $--content-append-column-short-width-in-percentage;
+    }
+  }
+
+  &--append_wide {
+    #{$component}__main-column {
+      width: calc(#{100% - $--content-append-column-wide-width-in-percentage} - #{$--content-append-column-indent});
+    }
+    #{$component}__append-column {
+      width: $--content-append-column-wide-width-in-percentage;
+    }
+  }
+}

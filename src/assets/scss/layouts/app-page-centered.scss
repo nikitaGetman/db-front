@@ -1,0 +1,13 @@
+.app-page-centered {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  // хак для вертикального позиционирования в IE 11 (issue: https://github.com/philipwalton/flexbugs/issues/231)
+  &:after {
+    content: '';
+    display: block;
+    min-height: inherit;
+  }
+}

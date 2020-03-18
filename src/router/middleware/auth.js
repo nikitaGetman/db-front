@@ -1,4 +1,4 @@
-import { FETCH_PROFILE } from "@/store/modules/profile";
+import { FETCH_PROFILE } from "@/store/modules/auth";
 
 export default function auth({ next, store }) {
   const { isAuthenticated, isProfileLoaded } = store.getters;

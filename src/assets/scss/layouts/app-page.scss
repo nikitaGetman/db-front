@@ -1,0 +1,38 @@
+.app-page {
+  height: 100%;
+  overflow-y: hidden;
+
+  &__container {
+    position: relative;
+    height: calc(100% - #{$--header-height});
+  }
+  &__left-side,
+  &__content-wrapper,
+  &__right-side {
+    display: inline-block;
+    vertical-align: top;
+    height: 100%;
+  }
+  &__left-side,
+  &__right-side {
+    display: inline-flex;
+    flex-direction: column;
+    // overflow-y: auto;
+    width: $--sidebar-width;
+    padding-bottom: 22px;
+  }
+  &__left-side {
+    left: 0;
+    padding-left: 22px;
+    padding-right: 12px;
+    padding-top: 176px;
+  }
+  &__right-side {
+    right: 0;
+    padding-left: 17px;
+    padding-right: 22px;
+  }
+  &__content-wrapper {
+    width: $--content-width / 1920px * 100%;
+  }
+}
