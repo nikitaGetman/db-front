@@ -14,8 +14,24 @@ const apiService = {
   serviceLogin({ username, password }) {
     return this.client.post("/service/login/", { username, password });
   },
-  getMeProfile() {
-    return this.client.get("/me/");
+  getMeProfile(type) {
+    if (type === "user") return this.client.get("/user/me/");
+    else return this.client.get("/service/me/");
+  },
+  fetchServices() {
+    return this.client.get("/service/list/");
+  },
+  fetchDataFields() {
+    return this.client.get("/user/fields/");
+  },
+  fetchSelectedDataFields() {
+    return this.client.get("/service/permissions/");
+  },
+  fetchAuthedUsers() {
+    return this.client.get("/service/users/");
+  },
+  authenticateService(service) {
+    return this.client.post("/service/assign/", { service: service.id });
   }
 };
 

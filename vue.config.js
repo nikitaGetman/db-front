@@ -10,7 +10,7 @@ module.exports = {
         secure: false,
         changeOrigin: true
       },
-      "/me/": {
+      "/service/": {
         target: "http://localhost:3002/",
         secure: false,
         changeOrigin: true

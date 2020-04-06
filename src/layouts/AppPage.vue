@@ -26,6 +26,8 @@ export default {
   data() {
     return {};
   },
-  methods: {}
+  methods: {
+    toggleDrawer() {}
+  }
 };
 </script>

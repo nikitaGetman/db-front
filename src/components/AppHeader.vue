@@ -1,12 +1,8 @@
 <template>
   <header class="app-header">
     <div class="app-header__content">
+      <div class="app-header__logo">Online Passport</div>
       <nav class="app-header__nav">
-        <ul class="app-header__list">
-          <router-link :to="{ name: 'settings' }">Настройки</router-link>
-          <el-button type="text" @click="logout">Выход</el-button>
-        </ul>
-
         <ul class="app-header__list">
           <li class="app-header__profile">
             <button
@@ -18,6 +14,11 @@
             </button>
           </li>
         </ul>
+        <ul class="app-header__list">
+          <el-button type="text" @click="logout" class="app-header__link"
+            >Logout</el-button
+          >
+        </ul>
       </nav>
     </div>
   </header>
@@ -25,12 +26,13 @@
 
 <script>
 import { LOGOUT } from "@/store/actions/types";
+import { MODULE_NAME as AUTH } from "@/store/modules/auth";
 
 export default {
   name: "AppHeader",
   computed: {
     profileName() {
-      return "profile name";
+      return this.$store.state[AUTH].model.login;
     },
     navigationItems() {
       return [

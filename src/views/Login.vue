@@ -75,10 +75,10 @@ export default {
   },
   data() {
     return {
-      userLogin: "",
-      userPassword: "",
-      serviceLogin: "",
-      servicePassword: "",
+      userLogin: "user1",
+      userPassword: "qwerty",
+      serviceLogin: "service1",
+      servicePassword: "qwerty",
       activeName: "user",
       error: ""
     };
@@ -112,7 +112,7 @@ export default {
           password: this.servicePassword
         })
         .then(() => {
-          this.$router.push({ name: "dashboard" });
+          this.$router.push({ name: "service" });
         })
         .catch(() => {
           this.error = "Ошибка авторизации";
