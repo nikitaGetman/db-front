@@ -14,6 +14,11 @@ module.exports = {
         target: "http://localhost:3002/",
         secure: false,
         changeOrigin: true
+      },
+      "/field/": {
+        target: "http://localhost:3002/",
+        secure: false,
+        changeOrigin: true
       }
     }
   },

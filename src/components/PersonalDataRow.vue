@@ -34,17 +34,26 @@ export default {
   },
   data() {
     return {
-      localValue: this.value
+      localValue: ""
     };
+  },
+  created() {
+    this.localValue = this.value;
+  },
+  watch: {
+    value(val) {
+      this.localValue = val;
+    }
   },
   computed: {
     label() {
-      return this.describer.name;
+      return this.describer.type_code;
     }
   },
   methods: {
     saveData() {
       this.$emit("save", { value: this.localValue, field: this.describer });
+      // this.localValue =
     }
   }
 };

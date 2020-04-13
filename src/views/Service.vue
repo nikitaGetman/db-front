@@ -14,21 +14,31 @@
           </div>
         </div>
         <div class="service__users-list">
+          <p class="placeholder" v-if="!users.length">
+            There is no authenticated users yet
+          </p>
           <user-row v-for="(user, index) in users" :user="user" :key="index" />
         </div>
       </div>
       <div class="service__data">
-        <div class="service__data-title">Required Fields:</div>
+        <div class="service__data-title">
+          Required data groups (you can only change settings when there are no
+          authorized users):
+        </div>
         <div class="service__data-list">
           <el-checkbox
             class="service__data-item"
-            v-for="(field, index) in dataTypes"
+            v-for="(field, index) in localPermission"
             :key="index"
-            v-model="localPermission[field.name]"
-            >{{ field.name }}</el-checkbox
+            v-model="localPermission[index].value"
+            >{{ field.group_code }}</el-checkbox
           >
         </div>
-        <el-button type="success" size="medium" @click="saveRequiredFields"
+        <el-button
+          type="success"
+          size="medium"
+          @click="saveRequiredFields"
+          :disabled="users.length > 0"
           >Save</el-button
         >
       </div>
@@ -41,9 +51,10 @@ import AppPage from "@/layouts/AppPage.vue";
 import AppPageContent from "@/layouts/AppPageContent.vue";
 import UserRow from "@/components/UserRow.vue";
 import {
-  FETCH_DATA_FIELDS,
-  FETCH_SELECTED_FIELDS,
-  FETCH_AUTHED_USERS
+  FETCH_DATA_GROUPS,
+  FETCH_SELECTED_GROUPS,
+  FETCH_AUTHED_USERS,
+  SET_PERMISSION
 } from "@/store/modules/services";
 
 export default {
@@ -57,17 +68,8 @@ export default {
     return {
       isSelectServiceVisible: false,
       localPermission: [],
-      dataTypes: [
-        { name: "Name" },
-        { name: "Surname" },
-        { name: "Passport" },
-        { name: "Address" }
-      ],
-      users: [
-        { name: "Ivan", age: 22 },
-        { name: "Petr", age: 31 },
-        { name: "Jack", age: 18 }
-      ]
+      dataGroups: [],
+      users: []
     };
   },
   computed: {
@@ -76,27 +78,35 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch(FETCH_DATA_FIELDS).then(data => {
-      console.log(data);
-      this.dataTypes = data;
-
-      this.$store.dispatch(FETCH_SELECTED_FIELDS).then(fields => {
-        let res = [];
-        this.dataTypes.forEach(type => {
-          res[type.name] = fields.find(f => f.name === type.name);
-        });
-        this.localPermission = res;
-      });
+    this.fetchPermissions().then(() => {
+      this.fetchServicePermisssions();
     });
-    this.$store.dispatch(FETCH_AUTHED_USERS).then(data => {
-      console.log(data);
-      this.users = data;
-    });
+    this.fetchAuthedUsers();
   },
   methods: {
+    fetchPermissions() {
+      return this.$store.dispatch(FETCH_DATA_GROUPS).then(data => {
+        this.dataGroups = data.groups;
+      });
+    },
+    fetchServicePermisssions() {
+      return this.$store.dispatch(FETCH_SELECTED_GROUPS).then(data => {
+        const { permission } = data;
+        this.localPermission = this.dataGroups.map(g => {
+          return {
+            ...g,
+            value: permission.find(p => p.group_id === g.id) ? true : false
+          };
+        });
+      });
+    },
+    fetchAuthedUsers() {
+      return this.$store.dispatch(FETCH_AUTHED_USERS).then(data => {
+        this.users = data.users;
+      });
+    },
     saveRequiredFields() {
-      // const res = [];
-      console.log("saving", this.localPermission);
+      this.$store.dispatch(SET_PERMISSION, this.localPermission);
     }
   }
 };
@@ -138,5 +148,11 @@ export default {
   font-style: italic;
   font-weight: normal;
   color: $--dim-blue;
+}
+
+.placeholder {
+  text-align: center;
+  color: $--slate-blue;
+  font-size: 24px;
 }
 </style>

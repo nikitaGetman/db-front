@@ -21,10 +21,13 @@
           >
         </div>
         <div class="dashboard__services-list">
+          <p class="placeholder" v-if="!services.length">
+            There is no authenticated services yet
+          </p>
           <service-row
-            v-for="service in services"
+            v-for="(service, index) in services"
             :service="service"
-            :key="service.id"
+            :key="index"
             @delete="deleteService(service)"
           />
         </div>
@@ -42,7 +45,10 @@
         </div>
       </div>
     </app-page-content>
-    <select-service-dialog :visible.sync="isSelectServiceVisible" />
+    <select-service-dialog
+      :visible.sync="isSelectServiceVisible"
+      @added="fetchAuthedServices"
+    />
   </app-page>
 </template>
 
@@ -52,7 +58,12 @@ import AppPageContent from "@/layouts/AppPageContent.vue";
 import ServiceRow from "@/components/ServiceRow.vue";
 import PersonalDataRow from "@/components/PersonalDataRow.vue";
 import SelectServiceDialog from "@/components/SelectServiceDialog.vue";
-import { FETCH_DATA_FIELDS } from "@/store/modules/services";
+import {
+  FETCH_DATA_FIELDS,
+  DELETE_SERVICE,
+  FETCH_AUTHED_SERVICES
+} from "@/store/modules/services";
+import { FETCH_USER_VALUES, SET_USER_VALUE } from "@/store/modules/auth";
 
 export default {
   name: "Dashboard",
@@ -66,22 +77,12 @@ export default {
   data() {
     return {
       isSelectServiceVisible: false,
-      dataTypes: [
-        { name: "Name" },
-        { name: "Surname" },
-        { name: "Passport" },
-        { name: "Address" }
-      ]
+      dataTypes: [],
+      userValues: [],
+      services: []
     };
   },
   computed: {
-    services() {
-      return [
-        { title: "Service 1", id: 1 },
-        { title: "Berrr", id: 2 },
-        { title: "Poiter", id: 3 }
-      ];
-    },
     personalDataFields() {
       return this.dataTypes;
     },
@@ -90,23 +91,45 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch(FETCH_DATA_FIELDS).then(data => {
-      console.log(data);
-      this.dataTypes = data;
-    });
+    this.fetchDataFields();
+    this.fetchUserValues();
+    this.fetchAuthedServices();
   },
   methods: {
+    fetchDataFields() {
+      this.$store.dispatch(FETCH_DATA_FIELDS).then(data => {
+        this.dataTypes = data.fields;
+      });
+    },
+    fetchUserValues() {
+      this.$store.dispatch(FETCH_USER_VALUES).then(data => {
+        this.userValues = data.user_data;
+      });
+    },
+    fetchAuthedServices() {
+      this.$store.dispatch(FETCH_AUTHED_SERVICES).then(data => {
+        this.services = data.services;
+      });
+    },
     addServices() {
       this.isSelectServiceVisible = true;
     },
     deleteService(service) {
-      console.log("delete", service);
+      this.$store.dispatch(DELETE_SERVICE, { service }).then(() => {
+        this.fetchAuthedServices();
+      });
     },
     getUserValue(field) {
-      console.log(field);
+      const value = this.userValues.find(val => val.type_id === field.id);
+      return value ? value.value : "";
     },
     saveUserValue(value, field) {
-      console.log("save", value, field);
+      this.$store.dispatch(SET_USER_VALUE, { field, value }).then(data => {
+        this.userValues = this.userValues.map(v => {
+          if (v.type_id === data.field) return { ...v, value: data.value };
+          else return v;
+        });
+      });
     }
   }
 };
@@ -142,5 +165,10 @@ export default {
   font-style: italic;
   font-weight: normal;
   color: $--dim-blue;
+}
+.placeholder {
+  text-align: center;
+  color: $--slate-blue;
+  font-size: 24px;
 }
 </style>

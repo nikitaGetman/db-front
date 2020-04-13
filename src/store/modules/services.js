@@ -6,8 +6,12 @@ export const MODULE_NAME = "services";
 export const FETCH_SERVICES = "fetchServices";
 export const FETCH_DATA_FIELDS = "fetchDataFields";
 export const FETCH_AUTHED_USERS = "fetchAuthedUserd";
-export const FETCH_SELECTED_FIELDS = "fetchSelectedPermissions";
+export const FETCH_SELECTED_GROUPS = "fetchSelectedPermissions";
 export const AUTHENTICATE_SERVICE = "authenticateService";
+export const DELETE_SERVICE = "deleteService";
+export const FETCH_AUTHED_SERVICES = "fetchAuthedServices";
+export const FETCH_DATA_GROUPS = "fetchDataGroups";
+export const SET_PERMISSION = "setPermissions";
 
 export default {
   state: {
@@ -21,8 +25,7 @@ export default {
       return getters.apiService
         .fetchServices()
         .then(data => {
-          console.log("services", data);
-          commit(SET_LIST, { name: MODULE_NAME, list: data || [] });
+          commit(SET_LIST, { name: MODULE_NAME, list: data.services || [] });
         })
         .catch(throwError(commit, "Ошибка получения списка сервисов"))
         .finally(() => commit(LOADED, MODULE_NAME));
@@ -33,7 +36,7 @@ export default {
         .then(data => data)
         .catch(throwError(commit, "Ошибка получения списка полей"));
     },
-    [FETCH_SELECTED_FIELDS]: ({ commit, getters }) => {
+    [FETCH_SELECTED_GROUPS]: ({ commit, getters }) => {
       return getters.apiService
         .fetchSelectedDataFields()
         .then(data => data)
@@ -54,6 +57,30 @@ export default {
         .then(data => data)
         .catch(throwError(commit, "Ошибка авторизации сервиса"))
         .finally(() => commit(LOADED, MODULE_NAME));
+    },
+    [DELETE_SERVICE]: ({ commit, getters }, service) => {
+      return getters.apiService
+        .deleteService(service)
+        .then(data => data)
+        .catch(throwError(commit, "Ошибка удаления сервиса"));
+    },
+    [FETCH_AUTHED_SERVICES]: ({ commit, getters }) => {
+      return getters.apiService
+        .fetchAuthedServices()
+        .then(data => data)
+        .catch(throwError(commit, "Ошибка получения списка сервисов"));
+    },
+    [FETCH_DATA_GROUPS]: ({ commit, getters }) => {
+      return getters.apiService
+        .fetchDataGroups()
+        .then(data => data)
+        .catch(throwError(commit, "Ошибка получения списка групп данных"));
+    },
+    [SET_PERMISSION]: ({ commit, getters }, data) => {
+      return getters.apiService
+        .setPermissions(data)
+        .then(data => data)
+        .catch(throwError(commit, "Ошибка установки прав"));
     },
     [LOGOUT]: ({ commit }) => {
       commit(SET_MODEL, { name: MODULE_NAME, model: {} });

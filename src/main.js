@@ -24,10 +24,12 @@ const UNKNOWN_STATUS = 408;
 apiService.client.interceptors.request.use(
   config => {
     const { headers } = config;
-    const authHeaders = store.getters.headers;
     return {
       ...config,
-      headers: { ...headers, ...authHeaders }
+      headers: {
+        ...headers,
+        Authorization: `Bearer ${localStorage.getItem("auth_token")}`
+      }
     };
   },
   error => error

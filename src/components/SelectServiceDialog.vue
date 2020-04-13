@@ -12,6 +12,7 @@
         :key="index"
         :service="service"
         is-addable
+        @add="authenticateService(service)"
       />
     </div>
   </el-dialog>
@@ -47,7 +48,9 @@ export default {
       this.$emit("update:visible", false);
     },
     authenticateService(service) {
-      this.$store.dispatch(AUTHENTICATE_SERVICE, { service });
+      this.$store.dispatch(AUTHENTICATE_SERVICE, { service }).then(() => {
+        this.$emit("added");
+      });
     }
   }
 };

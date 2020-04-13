@@ -22,7 +22,13 @@ const apiService = {
     return this.client.get("/service/list/");
   },
   fetchDataFields() {
+    return this.client.get("/user/all-fields/");
+  },
+  fetchUserValues() {
     return this.client.get("/user/fields/");
+  },
+  setUserValue({ field, value }) {
+    return this.client.post("/field/", { field, value });
   },
   fetchSelectedDataFields() {
     return this.client.get("/service/permissions/");
@@ -30,8 +36,20 @@ const apiService = {
   fetchAuthedUsers() {
     return this.client.get("/service/users/");
   },
+  fetchAuthedServices() {
+    return this.client.get("/user/services/");
+  },
   authenticateService(service) {
-    return this.client.post("/service/assign/", { service: service.id });
+    return this.client.post("/service/assign/", { service: service.service });
+  },
+  deleteService(service) {
+    return this.client.post("/service/delete/", { service });
+  },
+  fetchDataGroups() {
+    return this.client.get("/user/data-groups/");
+  },
+  setPermissions(data) {
+    return this.client.post("/service/permissions/", data);
   }
 };
 

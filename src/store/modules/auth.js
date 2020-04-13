@@ -13,6 +13,8 @@ export const ACCOUNT_TYPE = "account_type";
 export const USER_LOGIN = "userLogin";
 export const FETCH_PROFILE = "fetchProfile";
 export const SERVICE_LOGIN = "serviceLogin";
+export const FETCH_USER_VALUES = "fetchUserValues";
+export const SET_USER_VALUE = "setUserValue";
 
 export default {
   state: {
@@ -36,6 +38,7 @@ export default {
       return !state.is_user;
     },
     headers: (state, { isAuthenticated }) => {
+      console.log("isAuthenticated", isAuthenticated);
       if (!isAuthenticated) return {};
 
       return {
@@ -85,6 +88,18 @@ export default {
         })
         .catch(throwError(commit, "Ошибка получения профиля"))
         .finally(() => commit(LOADED, MODULE_NAME));
+    },
+    [FETCH_USER_VALUES]: ({ commit, getters }) => {
+      return getters.apiService
+        .fetchUserValues()
+        .then(data => data)
+        .catch(throwError(commit, "Ошибка получения списка полей"));
+    },
+    [SET_USER_VALUE]: ({ commit, getters }, payload) => {
+      return getters.apiService
+        .setUserValue(payload)
+        .then(data => data)
+        .catch(throwError(commit, "Ошибка установки поля"));
     },
     [LOGOUT]: ({ commit }) => {
       const model = { key: null, empty: true };
