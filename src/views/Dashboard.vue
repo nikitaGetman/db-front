@@ -125,10 +125,15 @@ export default {
     },
     saveUserValue(value, field) {
       this.$store.dispatch(SET_USER_VALUE, { field, value }).then(data => {
-        this.userValues = this.userValues.map(v => {
-          if (v.type_id === data.field) return { ...v, value: data.value };
-          else return v;
-        });
+        if (this.userValues.find(v => v.type_id === data.field)) {
+          this.userValues = this.userValues.map(v =>
+            v.type_id === data.field ? { ...v, value: data.value } : v
+          );
+        } else {
+          const val = this.dataTypes.find(v => v.id === data.field);
+
+          this.userValues.push({ ...val, value: data.value, type_id: val.id });
+        }
       });
     }
   }

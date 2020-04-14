@@ -14,7 +14,7 @@
           </div>
         </div>
         <div class="service__users-list">
-          <p class="placeholder" v-if="!users.length">
+          <p class="placeholder" v-if="!usersAuthedLength">
             There is no authenticated users yet
           </p>
           <user-row v-for="(user, index) in users" :user="user" :key="index" />
@@ -38,7 +38,7 @@
           type="success"
           size="medium"
           @click="saveRequiredFields"
-          :disabled="users.length > 0"
+          :disabled="usersAuthedLength > 0"
           >Save</el-button
         >
       </div>
@@ -69,12 +69,12 @@ export default {
       isSelectServiceVisible: false,
       localPermission: [],
       dataGroups: [],
-      users: []
+      users: {}
     };
   },
   computed: {
     usersAuthedLength() {
-      return this.users.length;
+      return Object.keys(this.users).length;
     }
   },
   created() {
